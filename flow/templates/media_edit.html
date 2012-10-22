@@ -1,0 +1,121 @@
+{% extends "media_base.html" %}
+{% load flow_extras %}
+
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}flow/css/video_settings.css" />
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+{% player %}
+<form action="" method="post" enctype="multipart/form-data">
+<ul>
+	<li class="form_row">
+		<label>Title:</label>
+		<div class="input">{{ media_form.title }}</div>
+	</li>
+	<li class="form_row">
+		<label>Description:</label>
+		<div class="input">{{ media_form.description }}</div>
+	</li>
+	<!--li class="form_row">
+		<label>Playlists:</label>
+		<div class="input">{{ media_form.playlists }}</div>
+	</li-->
+	<li class="form_row">
+		{{ media_form.playlists_html }}
+	</li>
+	<li class="form_row">
+		{{ media_form.pub_date.label_tag }}
+		<div class="input">{{ media_form.pub_date }}</div>
+	</li>
+	<li class="form_row">
+		<label>Poster Image:</label>
+		<div class="input">
+			<div id="thumb" class="thumb" style="float: left;"><img src="{{ media.get_thumb64_url }}" /></div>
+			<div id="thumb_progress" class="thumb" style="float: left;"><img src="{{ MEDIA_URL }}flow/img/roller.gif" style="margin-top:16px;margin-left:24px;" /></div>
+			<input type="button" id="thumb_trigger" value="Get Frame" media_id="{{ media.id }}" />
+			<input id="id_thumb" name="thumb_file" type="hidden" value="{{ media.thumb }}" />
+			<script type="text/javascript">// <![CDATA[
+				$('thumb_trigger').observe('click', function(){thumb_trigger('thumb_trigger', '{{ MEDIA_URL }}flow/');});
+				$('thumb_progress').hide();
+			//]]></script>
+			<br style="clear: both;" />
+		</div>
+	</li>
+	<li class="form_row checkbox_row">
+		{{ media_form.display_comments }}<label> Display comments</label>
+	</li>
+	<li class="form_row">
+		<label>Display Size:</label>
+		<div class="input">
+			{{ media_form.display_size }}<span id="custom_display_size">&nbsp; {{ media_form.display_width }} x {{ media_form.display_height }}</span>
+		</div>
+		<script type="text/javascript">// <![CDATA[
+			var initDisplaySize = function() {
+				if ($F('id_display_size') == 'C') {
+					$('custom_display_size').show();
+				}
+				else {
+					$('custom_display_size').hide();
+				}
+			}
+			initDisplaySize();
+			$('id_display_size').observe('change', initDisplaySize);
+		//]]></script>
+	</li>
+	<li class="form_row checkbox_row">
+		{{ media_form.displaytc }}<label> Display timecode</label>
+	</li>
+		<li class="form_row" id="hasedl">
+			<label>EDL File:</label>
+			<div class="input">
+				{{ media.get_edl_origname }} <i>Uploaded {{ media.get_edl_date|date:"M j, Y \a\t P" }}</i>
+				<a id="remove_edl" class="delete">Remove</a>
+			</div>
+		</li>
+		<li><ul id="noedl">
+		<li class="form_row">
+			<label>Start timecode:</label>
+			<div class="input">
+				<input class="timecode" id="start_tc" name="starttc" value="{{ media.starttc|default:"" }}" type="text" size="11" maxlength="11" />
+				{{ media_form.frame_rate }}
+				<span class="help"><br />HH:MM:SS:FF</span>
+			</div>
+		</li>
+		<li style="margin: -20px 20px -15px 20px;">--- or ---</li>
+		<li class="form_row">
+			<label for="edl_file">EDL file:</label>
+			<div class="input"><input type="file" id="edl_file" name="edl_file" style="color: #fff;" /></div>
+		</li>
+		</ul></li>
+	<script type="text/javascript">// <![CDATA[
+		//tcInit('start', '{{ media.starttc }}');
+		initTCInput('start_tc', 'id_frame_rate', '{{ media.starttc }}');
+		if ({{ media.edl|yesno:"1,0" }}) {
+			$('remove_edl').observe('click', function() {
+				// ajax remove edl
+				new Ajax.Request('/a/remove_edl', {
+					asynchronous: true,
+					method: 'get',
+					parameters: {
+						'media_id': {{ media.id }}
+					},
+					onSuccess: function(transport) {
+						$('hasedl').hide(); $('noedl').show();
+					}
+				});
+			});
+			$('hasedl').show(); $('noedl').hide();
+		}
+		else {
+			$('hasedl').hide(); $('noedl').show();
+		}
+	//]]></script>
+
+	<li class="form_row">
+		<input type="submit" name="save" value="Save" />
+	</li>
+</form>
+{% endblock %}

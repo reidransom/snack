@@ -1,0 +1,20 @@
+<ul id="{{ id }}" class="timecode">
+	<li><label>{{ label }}</label></li>
+	{% if not tcformat %}
+	<li>
+		<select id="{{ id }}_dnd" name="{{ id }}_dnd">
+			<option value="nondrop">non drop</option>
+			<option value="drop">drop</option>
+		</select>
+	</li>
+	{% else %}
+	<input type="hidden" id="{{ id }}_dnd" name="{{ id }}_dnd" value="{{ tcformat }}" />
+	{% endif %}
+	<li>
+		<input id="{{ id }}_tc" name="{{ id }}_tc" value="{{ value|default:"" }}" type="text" size="11" maxlength="11" />
+	</li>
+	<li id="{{ id }}_help" class="help">HH:MM:SS:FF</li>
+</ul>
+<script>
+tcInit('{{ id }}');
+</script>

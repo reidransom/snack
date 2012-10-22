@@ -1,0 +1,8 @@
+{% load flow_extras %}
+{% if medias %}
+<fieldset><legend>Recently Watched</legend>
+{% for media in medias|slice:":5" %}
+	<a href="{{ media.get_url }}" style="background-image: url({{ media.get_thumb32_url }});" class="thumb">{{ media.title }}</a>
+{% endfor %}
+</fieldset>
+{% endif %}

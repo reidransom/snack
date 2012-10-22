@@ -1,0 +1,11 @@
+{% extends "playlist_base.html" %}
+{% load flow_extras %}{% load humanize %}{% load comments %}
+{% block content %}
+{{ block.super }}
+{% if not playlist.no_settings %}
+<div class="right_links">
+	<a href="itpc://{{ request.get_host }}{% url flow.views.feed playlist.path %}">subscribe via iTunes</a>
+</div>
+{% endif %}
+{% media_list_as_ul request playlist.medias playlist %}
+{% endblock %}

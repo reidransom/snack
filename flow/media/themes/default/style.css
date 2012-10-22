@@ -1,0 +1,109 @@
+* {
+	color: #ddd;
+}
+
+a, label, h1, h2, h3, legend {
+	color: #fff;
+}
+a {
+	padding: 3px;
+}
+a:hover {
+	background-color: #000;
+}
+
+input, textarea, select, option {
+	color: #000;
+}
+body {
+	background: #161615 url(bg.gif) repeat-x fixed;
+}
+
+::-moz-selection {
+	background: #0f0;
+	color: #000;
+}
+::selection {
+	background: #0f0;
+	color: #000;
+}
+
+#logo {
+	font-weight: bold;
+	text-align: center;
+	margin: 20px 0;
+	width: 200px;
+	color: #fff;
+}
+
+div#leftcontent fieldset {
+	border-color: transparent;
+}
+div#leftcontent fieldset legend {
+	font-size: 110%;
+}
+
+a.thumb {
+	text-decoration: none;
+	color: #ddd;
+}
+a.thumb:hover {
+	background-color: #000;
+}
+
+.pipe {
+	border-left-color: #fff;
+}
+
+.comment .info p {
+	font-size: 85%;
+}
+
+ul.tabs {
+	display: block;
+	border-collapse: collapse;
+	margin: 10px 0 50px 0;
+	white-space: nowrap;
+	list-style: none;
+	height: auto;
+}
+ul.tabs li {
+  display: inline;
+}
+ul.tabs li a {
+  padding: 5px 10px;
+  background-color: #777;
+  height: auto;
+  margin: 2px;
+  text-decoration: none;
+  min-width: 50px;
+  float: left;
+  display: block;
+}
+ul.tabs li a.active {
+	font-weight: bold;
+	background-color: #000;
+}
+ul.tabs li.active a {
+	font-weight: bold;
+	background-color: #000;
+}
+ul.tabs li a:hover {
+	background-color: #000;
+}
+ul.tabs li a.active:hover {
+	/*cursor: default;*/
+}
+
+div.media_list a.row {
+	color: #ccc;
+}
+div.media_list a.row:hover {
+	background-color: #000;
+}
+div.media_list span.title {
+	color: #fff;
+}
+ul.comments .form_row .info .name {
+	color: #fff;
+}

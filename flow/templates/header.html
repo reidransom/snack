@@ -1,0 +1,8 @@
+{% load flow_extras %}{% load multisite_tags %}
+{% if request.user.is_authenticated %}
+	<span id="username">{{ request.user.username|shortname }}</span>
+	{% if request.user.is_staff %}{% pipe %}<a href="/admin/">Settings</a>{% endif %}
+	{% pipe %}<a href="/a/logout">Sign Out</a>
+{% else %}
+	{% ifnotequal request.path "/signin" %}<a href="{% url flow_login %}?next={{ request.get_full_path }}">Sign In</a>{% endifnotequal %}
+{% endif %}

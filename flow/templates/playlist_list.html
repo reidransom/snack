@@ -1,0 +1,7 @@
+<fieldset>
+	<legend>Playlists</legend>
+{% for playlist in playlist_list %}
+	<a href="{{ playlist.get_url }}" class="playlist">{{ playlist.name }}</a>
+{% endfor %}
+	{% if user.is_staff %}<a href="{% url flow.views.action "add_playlist" %}" class="playlist" style="font-size: 80%;">+ add playlist</a>{% endif %}
+</fieldset>

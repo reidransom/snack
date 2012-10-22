@@ -1,0 +1,25 @@
+{% load flow_extras %}{% load humanize %}{% load comments %}
+<div class="media_list">
+{% for media in media_list %}
+{% if not media.error %}
+{% get_comment_count for media as comment_count %}
+	<a class="row" style="background-image: url({{ media.get_thumb32_url }});" href="{% media_url %}">
+		<ul class="media_list_info">
+			<li style="width: 60px;">{{ media.pub_date|date:"M j" }}</li>
+			<li style="width: 60px;">{{ media.width }}x{{ media.height }}</li>
+			<li style="width: 90px;">{{ comment_count }} Comment{{ comment_count|pluralize }}</li>
+			<li style="width: 50px;">{{ media.duration|quote_duration|escape }}</li>
+		</ul>
+		<span class="title">{{ media.title }}</span>
+		<br />
+		{{ media.description }}
+	</a>
+{% else %}{% if user.is_staff %}
+	<a class="row error">
+		<span class="title">{{ media.title }}</span>
+		<br />
+		{{ media.get_error_message }}
+	</a>
+{% endif %}{% endif %}
+{% endfor %}
+</div>

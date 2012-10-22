@@ -1,0 +1,48 @@
+{% extends "media_base.html" %}
+{% load flow_extras %}{% load humanize %}{% load comments %}
+{% block content %}
+{{ block.super }}
+<div class="right_links">
+	<a href="{{ media.get_file_url }}">download</a> - 
+	<a onclick="fullscreen_click('{{ request.get_full_path }}/fullscreen');">fullscreen</a>
+</div>
+{% player %}
+
+{# if media.display_comments #}{% if 0 %}
+	<h3>Comments</h3>
+	
+	<ul class="comments">
+	
+		{% render_comment_form for media %}
+		
+		<a id="show_comment_form">Post a comment</a>
+	
+		<li id="comment_preview_element" style="opacity: 0.7;"></li>
+	
+	{% get_comment_list for media as comment_list %}
+	{% for comment in comment_list reversed %}
+		<li class="form_row comment_row" id="comment_{{ comment.id }}">
+			<div class="info">
+				<span class="name">{{ comment.user_name }}</span><br />
+				{{ comment.submit_date|date:"M j h:i a" }}
+			</div>
+			<div class="input">
+			{% if request.user.is_staff %}
+				<div class="actions">
+					<form id="delete_comment_{{ comment.id }}" method="post" action="{{ request.path }}">
+						<input type="hidden" name="submit" value="delete_comment" />
+						<input type="hidden" name="comment_id" value="{{ comment.id }}" />
+						<input type="submit" value="delete" />
+					</form>
+				</div>
+			{% endif %}
+				{% markup comment.comment media %}
+			</div>
+		</li>
+		<br class="clear" />
+	{% endfor %}
+	<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/comments.js"></script>
+	
+	</ul>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% load flow_extras %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<div id="login_box">
+<h1>{{ site.info.title }} | Login</h2>
+<div>
+{% ifequal request.path "/signin_required" %}
+<p class="error_box">You need to be logged in to do that.</p><br />
+{% endifequal %}
+{% if form.errors %}
+<p class="error_box">Sorry, unrecognized username or password.</p><br />
+{% endif %}
+<form method="post" action="">
+<p>{{ form.username.label_tag }} {{ form.username }}</p><br />
+<p>{{ form.password.label_tag }} {{ form.password }}</p><br />
+<input type="submit" value="Sign In" style="float: right;" />
+<input type="hidden" name="next" value="{{ next }}" />
+{% csrf_token %}
+</form>
+</div>
+</div>
+{% endblock %}

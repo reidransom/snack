@@ -1,0 +1,14 @@
+li.form_row div.input {
+	margin-left: 130px;
+}
+li.form_row label {
+	float: left;
+	display: block;
+}
+li.checkbox_row label {
+	float: none;
+	display: inline;
+}
+span#custom_display_size input {
+	width: 5ex;
+}

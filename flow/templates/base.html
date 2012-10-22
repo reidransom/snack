@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load flow_extras %}
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>{% block title %}{{ site.info.title }}{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}flow/css/style.css" />
+
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}flow/themes/{{ site.info.theme }}/style.css" />
+
+<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/prototype.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/script.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/tc.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/qtobject.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/AC_Quicktime.js"></script>
+{% block head %}{% endblock %}
+</head>
+
+<body id="body">
+
+{% block body %}
+
+{% block sidebar %}
+<div id="leftcontent" switch="sidebar_switch">
+<div id="logo">{{ site.info.logotext|marksafe }}</div>
+{% playlist_list %}
+{% recently_watched %}
+
+</div>
+<a id="sidebar_switch" class="switch" status="{% get_attribute request "sidebar_switch" "" "show hide" %}" switch="sidebar_switch"></a>
+{% endblock %}
+
+<div id="centercontent" switch="sidebar_switch">
+<div id="header">
+{% header %}
+</div>
+{% block content %}{% endblock %}
+<div id="footer">
+{% block footer %}{% endblock %}
+{% for query in sql_queries %}
+<!--<p>{{ query.sql }} : {{ query.time }}</p>-->
+{% endfor %}
+</div>
+</div>
+
+<script type="text/javascript">// <![CDATA[
+initSwitch();
+//]]></script>
+
+{% endblock %}
+
+</body>
+</html>

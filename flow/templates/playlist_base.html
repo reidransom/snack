@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load flow_extras %}
+
+{% block title %}{{ site.info.title }} | {{ playlist.name }}{% endblock %}
+
+{% block content %}
+<div class="title">
+	<h1>{{ playlist.name }}</h1>
+	{% if playlist.description %}{{ playlist.description|escape|linebreaks }}{% endif %}
+</div>
+{% if user.is_staff and not playlist.no_settings %}
+<ul class="tabs">
+	<li><a {% ifequal view "view" %}class="active"{% else %}href="{{ playlist.get_url }}"{% endifequal %}>View</a></li>
+	<!--li><a {% ifequal view "log" %}class="active"{% else %}href="?v=log"{% endifequal %}>Log</a></li-->
+	<li><a {% ifequal view "edit" %}class="active"{% else %}href="{% url flow.views.playlist playlist.path "edit" %}"{% endifequal %}>Edit</a></li>
+</ul>
+{% endif %}
+{% endblock %}

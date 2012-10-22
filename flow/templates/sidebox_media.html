@@ -1,0 +1,7 @@
+{% load flow_extras %}
+<table class="nav_media"><tr>
+	<td style="width:68px;"><a href="{{ media.get_url }}"><img src="{{ media.thumb_image_url }}" class="thumb" /></a></td>
+	<td><a href="{{ media.get_url }}" style="font-size:8.5pt; font-weight:bold;">{{ media.title }}</a><br />
+	<span style="font-size:8pt;">{{ media.width }}x{{ media.height }} {{ media.duration|quote_duration|escape }}<br />
+	{{ media.pub_date|date:"M j" }}</span></td>
+</tr></table>

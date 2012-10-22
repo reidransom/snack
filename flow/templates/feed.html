@@ -1,0 +1,19 @@
+{% load flow_extras %}<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml-stylesheet href="http://feeds.feedburner.com/~d/styles/rss2enclosuresfull.xsl" type="text/xsl" media="screen"?><?xml-stylesheet href="http://feeds.feedburner.com/~d/styles/itemcontent.css" type="text/css" media="screen"?><rss xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
+
+<channel>
+	<title>{{ site.info.title }} | {{ playlist.name }}</title>
+	<link>{{ playlist.get_url }}</link>
+	<language>en-us</language>
+	<description>{{ playlist.description }}</description>
+	{% for media in medias %}<item>
+		<title>{{ media.title }}</title>
+		<description><![CDATA[{{ media.description }}]]></description>
+		<itunes:summary>{{ media.description }}</itunes:summary>
+		<itunes:subtitle>{{ media.description }}</itunes:subtitle>
+		<enclosure url="http://{{ request.get_host }}{{ media.get_file_url }}" length="" type="video/quicktime" />
+		<pubDate>{{ media.pub_date|date:"r" }}</pubDate>
+	</item>{% endfor %}
+</channel>
+</rss>

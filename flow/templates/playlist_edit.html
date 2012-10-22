@@ -1,0 +1,65 @@
+{% extends "playlist_base.html" %}
+{% load flow_extras %}{% load humanize %}{% load comments %}{% load multisite_tags %}
+
+{% block content %}
+
+{% if playlist %}
+{{ block.super }}
+<div class="right_links">
+	{% ifnotequal playlist.path "home" %}<a href="/a/delete_playlist?id={{ playlist.id }}">delete playlist</a>{% endifnotequal %}
+</div>
+<form action="{% url flow.views.playlist playlist.path "edit" %}" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="playlist_id" value="{{ playlist.id }}" />
+
+{% else %}
+<form action="/a/add_playlist" method="post" enctype="multipart/form-data">
+
+{% endif %}
+	
+	<ul class="form">
+		{% if playlist_form.my_error %}<li class="error_row">
+			{{ playlist_form.my_error }}
+		</li>{% endif %}
+		{% if playlist_form.errors %}<li class="error_row">
+			There was a problem saving this playlist.
+		</li>{% endif %}
+		<li>
+			{{ playlist_form.name.label_tag }}{{ playlist_form.name }}
+			{{ playlist_form.name.errors }}
+		</li>
+		<li>
+			{{ playlist_form.path.label_tag }}{{ playlist_form.path }}
+			{{ playlist_form.path.errors }}
+			<div class="info">Numbers, letters, and underscores only.</div>
+		</li>
+		<li><label>URL</label><div class="input">http://{{ request.get_host }}/playlist/<span id="url_path">{{ playlist.path }}</span>/</div></li>
+		<li>{{ playlist_form.description.label_tag }}{{ playlist_form.description }}</li>
+		<li>
+			{{ playlist_form.privacy.label_tag }}{{ playlist_form.privacy }}
+			<div class="info" id="privacy_PUB" style="display:none;">Anyone who visits this website will be able to see this playlist and all the videos in it.</div>
+			<div class="info" id="privacy_PAS" style="display:none;">Only users who are logged into this website and have permission to this playlist will be able to see it.</div>
+			<div class="info" id="privacy_SEC" style="display:none;">The playlist will be "cloaked" to users without permission, they will receive a "Not Found" page as opposed to a "Forbidden" page.</div>
+		</li>
+		<script>
+			var show_selected_privacy_info = function() {
+				$('privacy_PUB', 'privacy_PAS', 'privacy_SEC').invoke('display_none');
+				$('privacy_' + $F('id_privacy')).display_block();
+			}
+			show_selected_privacy_info();
+			$('id_privacy').observe('change', show_selected_privacy_info);
+		</script>
+		<li class="button"><input name="save" value="Save" type="submit" /></li>
+	</ul>
+</form>
+<script>
+if ($F('id_path') == 'home') {
+	$('id_path').readOnly = true;
+}
+var id_path_change = function() {
+	$('url_path').update($F('id_path'));
+}
+$('id_path').observe('keyup', id_path_change);
+$('id_path').observe('blur', id_path_change);
+id_path_change();
+</script>
+{% endblock %}

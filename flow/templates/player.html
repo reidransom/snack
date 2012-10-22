@@ -1,0 +1,100 @@
+<div id="player" style="width:{{ player_settings.width }}px; height:{{ player_settings.height|add:"16" }}px;">
+<script type="text/javascript">// <![CDATA[
+	args = [
+		'{{ player_settings.url }}',
+		'100%', '100%',
+		'',
+		'autoplay', '{{ player_settings.autoplay|default:"true"|lower }}',
+		'emb#bgcolor', '{{ player_settings.bgcolor|default:"#000000" }}',
+		'scale', '{{ player_settings.scale|default:"tofit" }}',
+		'align', 'middle',
+		'enablejavascript', 'true',
+		'showlogo', 'false'
+	]
+	QT_WriteOBJECT_XHTML.apply(this, args);
+	var player = $('player').get_qtplayer();
+//]]></script>
+<noscript>
+<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" width="{{ player_settings.width|default:"320" }}" height="{{ player_settings.height|default:"240"|add:"16" }}">
+  <param name="src" value="{{ player_settings.url }}" />
+  <param name="autoplay" value="{{ player_settings.autoplay|default:"true"|lower }}" />
+  <param name="controller" value="true" />
+  <param name="scale" value="{{ player_settings.scale|default:"aspect" }}" />
+  <param name="bgcolor" value="#000000" />
+  <param name="wmode" value="transparent" />
+  <!--[if !IE]>-->
+  <object type="video/quicktime" data="{{ player_settings.url }}" width="{{ player_settings.width }}" height="{{ player_settings.height|add:"16" }}">
+	<param name="autoplay" value="{{ player_settings.autoplay|lower }}" />
+	<param name="controller" value="true" />
+	<param name="scale" value="{{ player_settings.scale }}" />
+	<param name="bgcolor" value="#000000" />
+	<param name="wmode" value="transparent" />
+  </object>
+  <!--<![endif]-->
+</object>
+</noscript>
+<div id='debug' style="position: absolute; top: 0; left: 0;"></div>
+</div>
+
+{% if player_settings.timecode %}
+<div id="player_wrap" style="width:{{ player_settings.width }}px;">
+{% if media.edl %}
+<script type="text/javascript" src="{{ media.edl.url }}"></script>
+<script type="text/javascript">// <![CDATA[
+var tc_calc = new TimecodeCalc(edl, {{ media.get_fps }});
+//]]></script>
+{% else %}
+<script type="text/javascript">// <![CDATA[
+var start_tc = '{{ media.starttc }}';
+var tc_calc = new TimecodeCalc(start_tc, {{ media.get_fps }});
+//]]></script>
+{% endif %}
+
+	<span id="timecode" class="numeric">&nbsp;</span>
+	<script type="text/javascript">// <![CDATA[
+		new PeriodicalExecuter( function() {
+			var offset = player.getOffset();
+			var update_text = '';
+			var tc = '';
+			if (tc_calc.edl) {
+				var edit = tc_calc.editFromOffset(offset);
+				var tape = (edit) ? edit['src'] : 'None';
+				tc = tc_calc.timecodeFromOffset(offset, edit);
+				if ((player.getRate() != 0) && (edit)) {
+					tc = tc.substr(0, 9) + '--';
+				}
+				update_text = tape + ' - ' + tc;
+			}
+			else {
+				var tc = tc_calc.timecodeFromOffset(offset);
+				if (player.getRate() != 0) {
+					tc = tc.substr(0, 9) + '--';
+				}
+				update_text = tc;
+			}
+			$('timecode').update(update_text);
+		}, .5 );
+	//]]></script>
+</div>
+<!--a onclick="javascript:alert(player.getQtMatrix())">get matrix</a>
+<a onclick="javascript:alert(player.getRectangle())">get rectangle</a-->
+{% endif %}
+
+{% ifequal player_settings.scale "1" %}
+<script type="text/javascript">// <![CDATA[
+new PeriodicalExecuter(function(pe) {
+	var matrix = player.getQtMatrix();
+	if (matrix) {
+		var rect = player.getQtRectangle();
+		if (matrix[0][0] != 1) {
+			var width = (rect[2]-rect[0])+'px';
+			$('player', 'player_wrap').each(function(e) {e.setWidth(width);});
+		}
+		if (matrix[1][1] != 1) {
+			$('player').setHeight((16+rect[3]-rect[1])+'px');
+		}
+		pe.stop();
+	}
+}, 0.1);
+//]]></script>
+{% endifequal %}

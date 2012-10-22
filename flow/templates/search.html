@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load flow_extras %}{% load humanize %}{% load comments %}
+{% block head %}
+<style type="text/css">
+body {
+	padding-right: 10px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div id="playlist_wrap">
+
+<h2>Search Results</h2>
+
+<fieldset class="settings" switch="search_tapes">
+<legend class="switch" id="search_tapes" status="{% get_attribute request "search_tapes" "" "show hide" %}"><u>Tapes</u></legend>
+<div switch="search_tapes">
+{% media_list_as_ul request medias %}
+</div>
+</fieldset>
+{% if user.is_staff %}
+<fieldset class="settings" switch="search_logged_clips">
+<legend class="switch" id="search_logged_clips" status="{% get_attribute request "search_logged_clips" "" "show hide" %}"><u>Logged Clips</u></legend>
+<div switch="search_logged_clips">
+{% if stopped %}Common words not included in search: {{ stopped|join:" - " }}{% endif %}
+{% for result in results %}
+	<p>{{ result.media.title }} - {{ result.clip.bolded_text|marksafe }}</p>
+{% endfor %}
+</div>
+</fieldset>
+{% endif %}
+
+</div>
+{% endblock %}

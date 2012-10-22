@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load flow_extras %}
+{% block title %}Mess Media Default Settings{% endblock %}
+{% block content %}
+<h1>Site Settings</h1>
+<div id="site_settings">
+<form id="form_site_settings" action="/a/site_settings" method="post">
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<th>Apply settings to <select id="apply_settings">
+		<option value="new">New Videos</option>
+		<option value="existing">Existing Videos</option>
+	</select></th>
+	<th class="col2">
+		<input type="button" apply_to="{{ media.id }}" id="save" class="save" value="Save" />
+		<img src="{% include_url %}img/roller.gif" style="display:none;" />
+	</th>
+</tr>
+<tr>
+	<td>{% tc_input 'start_tc' media.starttc 'Start Timecode' %}</td>
+	<td class="col2">
+		<input type="button" apply_to="start_tc" class="apply" value="Apply" />
+		<img src="{% include_url %}img/roller.gif" style="display:none;" />
+	</td>
+</tr>
+<tr>
+	<td><input type="checkbox" id="display_tc" name="display_tc" value="display"{{ media.displaytc|yesno:" checked=\"checked\"," }} /><label for="display_tc"> Display Timecode</label></td>
+	<td class="col2">
+		<input type="button" apply_to="display_tc" class="apply" value="Apply" />
+		<img src="{% include_url %}img/roller.gif" style="display:none;" />
+	</td>
+</tr>
+<tr>
+	<td><ul>
+		<li><label for="display_size">Display Size </label></li>
+		<li><select id="display_size" name="display_size">
+			<option value="current"{{ media|size_selected:"current" }}>Current</option>
+			<option value="stf"{{ media|size_selected:"stf" }}>Size to fit (4:3)</option>
+			<option value="stfwide"{{ media|size_selected:"stfwide" }}>Size to fit (16:9)</option>
+			<option value="qvga"{{ media|size_selected:"qvga" }}>320x240 (4:3)</option>
+			<option value="qvgawide"{{ media|size_selected:"qvgawide" }}>320x180 (16:9)</option>
+			<option value="vga"{{ media|size_selected:"vga" }}>640x480 (4:3)</option>
+			<option value="vgawide"{{ media|size_selected:"vgawide" }}>640x360 (16:9)</option>
+			<option value="custom"{{ media|size_selected:"custom" }}>Custom</option>
+		</select></li>
+		<li id="custom_size"><input name="display_width" id="display_width" value="{{ media.display_width }}" type="text" size="3" maxlength="3" />x<input name="display_height" id="display_height" value="{{ media.display_height }}" type="text" size="3" maxlength="3" /></li>
+	</ul></td>
+	<td class="col2">
+		<input type="button" apply_to="display_size" class="apply" value="Apply" />
+		<img src="{% include_url %}img/roller.gif" style="display:none;" />
+	</td>
+</tr>
+<tr>
+	<td><input type="checkbox" id="display_comments" name="display_comments" value="display"{{ media.display_comments|yesno:" checked=\"checked\"," }} /><label for="display_comments"> Display Comments</label></td>
+	<td class="col2">
+		<input type="button" apply_to="display_comments" class="apply" value="Apply" />
+		<img src="{% include_url %}img/roller.gif" style="display:none;" />
+	</td>
+</tr>
+</table>
+</form>
+</div>
+<div id="debug"></div>
+<script type="text/javascript">// <![CDATA[
+
+var display_size_change = function() {
+	var f = Element.show;
+	if ($F('display_size') != 'custom') f = Element.hide;
+	f($('custom_size'));
+}
+display_size_change();
+$('display_size').observe('change', display_size_change);
+
+var apply_settings_change = function() {
+	var f = [Element.show, Element.hide];
+	if ($F('apply_settings') == 'new') f = [Element.hide, Element.show];
+	$('site_settings').select('.apply').each(f[0]);
+	$('site_settings').select('.save').each(f[1]);
+}
+apply_settings_change();
+$('apply_settings').observe('change', apply_settings_change);
+
+var apply_click = function(e) {
+	var params = $('form_site_settings').serialize(true);
+	params['apply_to'] = e.readAttribute('apply_to');
+	params['a'] = 'site_settings';
+	e.siblings().invoke('toggle'); e.toggle();
+	new Ajax.Request('/', {
+		method: 'get',
+		asynchronous: true,
+		parameters: params,
+		onSuccess: function(transport) {
+			//$('debug').update(transport.responseText);
+			var hilite_elems = e.up(index=1).descendants()
+			if (e.readAttribute('class') == 'save')
+				hilite_elems = $('site_settings').select('td', 'th');
+			hilite_elems.each(function(cell) {
+				new Effect.Highlight(cell, {startcolor:'#00ff00'});
+			});
+		},
+		onFailure: function(transport) {
+			alert('There was an error');
+			//$('debug').update(transport.responseText);
+		},
+		onComplete: function() {
+			e.siblings().invoke('toggle'); e.toggle();
+		}
+	});
+}
+$('site_settings').select('input.apply', 'input.save').each(function(e) {
+	e.observe('click', function() {apply_click(e);});
+});
+
+//]]></script>
+{% endblock %}

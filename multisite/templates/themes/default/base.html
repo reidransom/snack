@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load flow_extras %}
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>{% block title %}{% site_title %}{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{% include_url %}css/style.css" />
+<link rel="stylesheet" type="text/css" href="{% themes_url %}default/style.css" />
+<script type="text/javascript" src="{% include_url %}js/prototype.js"></script>
+<script type="text/javascript" src="{% include_url %}js/scriptaculous.js?load=effects"></script>
+<script type="text/javascript" src="{% include_url %}js/js_quicktags.js"></script>
+<script type="text/javascript" src="{% include_url %}js/script.js"></script>
+<script type="text/javascript" src="{% include_url %}js/tc.js"></script>
+<script type="text/javascript" src="{% include_url %}js/qtobject.js"></script>
+<script type="text/javascript" src="{% include_url %}js/AC_Quicktime.js"></script>
+<script type="text/javascript" src="{% include_url %}js/livepipe/src/livepipe.js"></script>
+{% block head %}{% endblock %}
+</head>
+
+<body id="body">
+
+{% block body %}
+
+<div id="leftcontent" switch="sidebar_switch">
+{% block sidebar %}
+<div id="logo"><!--space<br />station--></div>
+<!--{% search_box %}-->
+{% playlist_list %}
+{% recently_watched %}
+{% login %}
+{% endblock %}
+</div>
+<a id="sidebar_switch" class="switch" status="{% get_attribute request "sidebar_switch" "" "show hide" %}" switch="sidebar_switch"></a>
+
+<div id="centercontent" switch="sidebar_switch">
+<div id="header">
+{% header %}
+</div>
+{% block content %}{% endblock %}
+<div id="footer">
+{% block footer %}{% endblock %}
+</div>
+</div>
+
+<script type="text/javascript">// <![CDATA[
+initSwitch();
+//]]></script>
+
+{% endblock %}
+
+</body>
+</html>

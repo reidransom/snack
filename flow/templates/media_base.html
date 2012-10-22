@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load flow_extras %}
+
+{% block title %}{{ site.info.title }} | {{ media.title }}{% endblock %}
+
+{% block content %}
+
+<div class="title">
+	<h2>{{ media.playlist.name }}</h2>
+	<h1>{{ media.title }}</h1>
+	{% if media.description %}{{ media.description|escape|linebreaks }}{% endif %}
+</div>
+{% if user.is_staff %}
+<ul class="tabs">
+	<li><a {% ifequal view "view" %}class="active"{% else %}href="{{ media.get_url }}"{% endifequal %}>View</a></li>
+	<!--li><a {% ifequal view "log" %}class="active"{% else %}href="?v=log"{% endifequal %}>Log</a></li-->
+	<li><a {% ifequal view "edit" %}class="active"{% else %}href="{% media_url %}/edit"{% endifequal %}>Edit</a></li>
+</ul>
+{% endif %}
+{% endblock %}

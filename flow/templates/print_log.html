@@ -1,0 +1,33 @@
+{% load flow_extras %}
+<html>
+<head>
+<title>{{ playlist.name }} - {{ media.title }}</title>
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}flow/css/print_log.css" />
+</head>
+<body>
+
+<hr />
+<h2>{{ playlist.name }} - {{ media.title }}</h2>
+<p>{{ media.description }}</p>
+<hr />
+
+{% if media.logger or media.date_logged %}
+<p>Logged {{ media.logger|yesno:"by ," }}{{ media.logger }} {{ media.date_logged|yesno:"on ," }}{{ media.date_logged }}</p>
+{% endif %}
+
+<div class="attrs">
+	<span>Barcode: {{ media.tape_name }}</span>
+	<span>date_shot: {{ media.date_shot }}</span>
+	<span>tape_format: {{ media.get_tape_format_display }}</span>
+</div>
+
+<table cellpadding="2" cellspacing="0" border="1">
+{% for clip in clip_list %}
+<tr><td class="timecode" valign="top">{% from_offset clip.start media %}</td><td>{{ clip.get_text|linebreaks }}</td></tr>
+{% endfor %}
+</table>
+
+<p><center><b>--- END ---</b></center></p>
+
+</body>
+</html>

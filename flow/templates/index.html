@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load flow_extras %}
+{% block content %}
+<div id="login">
+<fieldset>
+<legend>Sign In</legend>
+{% login %}
+</fieldset>
+<fieldset>
+<legend>Screen a Video</legend>
+{% watch_it %}
+</fieldset>
+</div>
+{% endblock %}

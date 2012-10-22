@@ -1,0 +1,36 @@
+{% load comments %}{% load flow_extras %}
+<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/js_quicktags.js"></script>
+<form id="post_comment_form" action="{{ request.path }}" method="POST" style="display:none;">
+	<li class="form_row">
+		<label for="id_name">Your name</label>
+		<div class="input">
+			<input type="text" id="id_name" name="name" maxlength="50" />
+		</div>
+	</li>
+	<li class="form_row">
+		<label for="id_comment">Comment</label>
+		<div class="input">
+			<textarea id="id_comment" name="comment" rows="4"></textarea>
+    <a id="insert_tc">Insert TC</a>
+	<input id="post_comment" type="submit" name="submit" class="submit-post" value="Post Comment" />
+    <!--input type="submit" name="submit" class="submit-preview" value="Preview" /-->
+		</div>
+	</li>
+  {% for field in form %}
+	{% if field.is_hidden %}
+      {{ field }}
+    {% else %}
+      {% ifnotequal field.name "email" %}{% ifnotequal field.name "url" %}
+      {% ifnotequal field.name "name" %}{% ifnotequal field.name "comment" %}
+	  <p
+        {% if field.errors %} class="error"{% endif %}
+        {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+        {% if field.errors %}{{ field.errors }}{% endif %}
+        {{ field.label_tag }} {{ field }}
+      </p>
+	  {% endifnotequal %}{% endifnotequal %}
+	  {% endifnotequal %}{% endifnotequal %}
+    {% endif %}
+  {% endfor %}
+</form>
+<div id="id_comment_preview_element" style="opacity: 0.7;"></div>

@@ -1,0 +1,3 @@
+{% load flow_extras %}
+<a class="menu_trigger" content_id="{{ content_id }}">{{ title }}</a>
+<div id="{{ content_id }}" style="display:{% get_attribute request content_id 'display' 'block' %};" class="content">

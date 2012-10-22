@@ -1,0 +1,117 @@
+#player_wrap {
+	position: fixed;
+}
+
+div.rightcontent {
+	margin-left: 340px;
+}
+#save {
+	width: 10ex;
+}
+
+div#log {
+	margin-bottom: 30px;
+	padding-right: 20px;
+}
+div#log a.tc {
+	width: 12ex;
+	float: left;
+	text-align: center;
+	display: block;
+}
+div#log div.text {
+	margin-left: 13ex;
+	margin-right: 20px;
+}
+div.row div.text {
+	padding: 5px;
+	cursor: pointer;
+}
+div.row:hover a.delete {
+	display: block;
+}
+div.row div.text:hover {
+	background-color: #000;
+}
+div#log textarea {
+	width: 100%;
+}
+
+div.row a.delete {
+	display: none;
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	background-image: url(../img/Trash_Can_20.gif);
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	right: 20px;
+}
+
+div.row_form, div.row {
+	clear: both;
+}
+
+
+
+div.tacp {
+	background: url(../img/tacp/bg.png) repeat-x #fff;
+	height: 19px;
+	width: 100%;
+	margin: 0 1px;
+}
+div.tacp a {
+	display: block;
+	height: 19px;
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	float: left;
+	cursor: default;
+	padding: 0;
+}
+div.tacp a.add_clip {
+	width: 19px;
+	background-image: url(../img/tacp/add.png);
+}
+div.tacp a.add_clip:active {
+	background-position: -19px 0;
+}
+div.tacp a.mark_in {
+	width: 22px;
+	background-image: url(../img/tacp/mark.png);
+}
+div.tacp a.mark_in:active {
+	background-position: -22px 0;
+}
+div.tacp a.rewind {
+	width: 20px;
+	background-image: url(../img/tacp/rew.png);
+}
+div.tacp a.rewind:active {
+	background-position: -20px 0;
+}
+
+#play_pause {
+	width: 20px;
+	background-image: url(../img/tacp/playpause.png);
+}
+#play_pause.play {
+	background-position: 0 0;
+}
+#play_pause.play:active {
+	background-position: -20px 0;
+}
+#play_pause.pause {
+	background-position: -40px 0;
+}
+#play_pause.pause:active {
+	background-position: -60px 0;
+}
+
+div.tacp a.forward {
+	width: 21px;
+	background-image: url(../img/tacp/ff.png);
+}
+div.tacp a.forward:active {
+	background-position: -21px 0;
+}

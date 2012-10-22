@@ -1,0 +1,55 @@
+{% extends 'media_base.html' %}
+{% load flow_extras %}
+
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}flow/css/log.css" />
+<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/jquery.js"></script>
+<script type="text/javascript">// <![CDATA[
+jQuery.noConflict();
+//]]></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/jquery.autogrow.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/livepipe/src/hotkey.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}flow/js/log.js"></script>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<div class="right_links">
+	<a id="save" style="opacity:0.5;">Saved</a>
+	<a href="?v=print_log" title="Print">print</a>
+</div>
+{% player %}
+<div class="rightcontent">
+{% if clip_list %}
+	<div style="text-align: center; margin: 20px 0;">Edit an exisiting clip or add a new clip.</div>
+{% endif %}
+	<div id="log"></div>
+	<div style="margin-bottom: 50px; text-align: center;">END</div>
+</div>
+
+<script type="text/javascript">// <![CDATA[
+var log = new Log(
+	[
+{% for clip in clip_list %}
+		{
+			'id': '{{ clip.id }}',
+			'start': {{ clip.start|default:"0" }},
+			'text': '{{ clip.get_text|escapejs }}'
+		}{% if not forloop.last %},{% endif %}
+{% endfor %}
+	],
+	'{{ media.id }}',
+	tc_calc,
+	player
+);
+
+var resizeWindow = function() {
+	var top_position = Math.floor((document.viewport.getHeight()-{{ player_settings.height|add:"16" }})/2);
+	if (top_position < 140) top_position = 140;
+	$('player_wrap').setStyle({top:top_position+'px'});
+}
+resizeWindow();
+Event.observe(window, 'resize', resizeWindow);
+//]]></script>
+{% endblock %}

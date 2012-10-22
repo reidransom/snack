@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load flow_extras %}{% load multisite_tags %}
+
+{% block title %}{{ site.info.title }} | Settings{% endblock %}
+
+{% block content %}
+<div class="title">
+	<h1>{{ site.info.title }} | Settings</h1>
+</div>
+<ul class="tabs">
+	<li><a{% ifequal view "general" %} class="active"{% endifequal %} href="/admin/">General</a></li>
+	<li><a{% ifequal view "users" %} class="active"{% endifequal %} href="/admin/users" style="cursor:pointer;">Users</a></li>
+</ul>
+
+{% print_messages %}
+
+{% ifequal view "general" %}
+<br />
+<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
+	<ul>
+		{{ general_form|as_ul }}
+		<li class="button"><input name="save" value="Save" type="submit" /></li>
+	</ul>
+</form>
+{% endifequal %}
+
+{% ifequal view "users" %}
+
+{% if user_list %}
+<div class="right_links">
+	<a href="{% url flow.admin_views.add_user %}">add user</a>
+</div>
+<br />
+<div class="media_list">
+	{% for u in user_list %}
+	<a class="row" href="{% url flow.admin_views.edit_user u.id %}" style="padding-left:10px;">
+		<ul class="media_list_info">
+			<li style="width: 60px;">{{ u.is_staff|yesno:"Staff,Client" }}</li>
+		</ul>
+		<span class="title">{{ u.username|shortname }}</span><br />
+	</a>
+	{% endfor %}
+</div>
+{% endif %}
+
+{% if add_user_form %}
+<br />
+<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
+	<ul class="form">
+		{{ add_user_form|as_ul }}
+		<li class="button"><input name="save" value="Add User" type="submit" /></li>
+	</ul>
+</form>
+{% endif %}
+
+{% if edit_user_form %}
+<div class="right_links">
+	<a href="{% url flow.admin_views.delete_user edit_user.id %}">delete user</a>
+</div>
+<br />
+<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
+	<ul>
+		{{ edit_user_form|as_ul }}
+		{% if not edit_user.is_staff %}<li class="form_row">{{ edit_user_form.playlists }}</li>{% endif %}
+		<li class="button"><input name="save" value="Save" type="submit" /></li>
+	</ul>
+</form>
+{% endif %}
+
+{% endifequal %}
+{% endblock %}
