@@ -8,5 +8,5 @@ The site admin configures "smart folders" which get checked for changes each tim
 
 * Currently is uses quicktime to play video
 * It uses javascript to display timecode on the fly
-* Commenting including timecode links that jump to spots in the video
+* Commenting includes timecode links that jump to spots in the video
 * Theming
